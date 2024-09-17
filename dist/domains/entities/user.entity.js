@@ -14,7 +14,7 @@ const USER_CONFIG = {
     },
 };
 class UserEntity {
-    constructor(_id, _email, _password, _name, _secondName, _vk, _instagram, _youtube, _twitter, _facebook, _aboutMe, _gender, _birthday, _country, _city, _favoriteGenres, _films, _friends, _favoriteFilms, _expecredFilms, _persons, _favoritePersons, _reviews, _comments, _likedFilms, _dislikedFilms, _avatarImage, _wasOnline) {
+    constructor(_id, _email, _password, _name, _secondName, _vk, _instagram, _youtube, _twitter, _facebook, _aboutMe, _gender, _birthday, _country, _city, _favoriteGenres, _friends, _favoriteFilms, _persons, _reviews, _comments, _likedFilms, _dislikedFilms, _likedComments, _dislikedComments, _likedReviews, _dislikedReviews, _avatarImage) {
         this._id = _id;
         this._email = _email;
         this._password = _password;
@@ -31,18 +31,18 @@ class UserEntity {
         this._country = _country;
         this._city = _city;
         this._favoriteGenres = _favoriteGenres;
-        this._films = _films;
         this._friends = _friends;
         this._favoriteFilms = _favoriteFilms;
-        this._expecredFilms = _expecredFilms;
         this._persons = _persons;
-        this._favoritePersons = _favoritePersons;
         this._reviews = _reviews;
         this._comments = _comments;
         this._likedFilms = _likedFilms;
         this._dislikedFilms = _dislikedFilms;
+        this._likedComments = _likedComments;
+        this._dislikedComments = _dislikedComments;
+        this._likedReviews = _likedReviews;
+        this._dislikedReviews = _dislikedReviews;
         this._avatarImage = _avatarImage;
-        this._wasOnline = _wasOnline;
     }
     get id() {
         return this._id;
@@ -92,23 +92,14 @@ class UserEntity {
     get favoriteGenres() {
         return this._favoriteGenres;
     }
-    get films() {
-        return this._films;
-    }
     get friends() {
         return this._friends;
     }
     get favoriteFilms() {
         return this._favoriteFilms;
     }
-    get expectedFilms() {
-        return this._expecredFilms;
-    }
     get persons() {
         return this._persons;
-    }
-    get favoritePersons() {
-        return this._favoritePersons;
     }
     get reviews() {
         return this._reviews;
@@ -125,8 +116,17 @@ class UserEntity {
     get avatarImage() {
         return this?._avatarImage;
     }
-    get wasOnline() {
-        return this?._wasOnline;
+    get likedComments() {
+        return this._likedComments;
+    }
+    get dislikedComments() {
+        return this._dislikedComments;
+    }
+    get likedReviews() {
+        return this._likedReviews;
+    }
+    get dislikedReviews() {
+        return this._dislikedReviews;
     }
     getUserData() {
         return {
@@ -147,18 +147,26 @@ class UserEntity {
             city: this._city,
             favoriteGenres: this._favoriteGenres,
             favoriteFilms: this._favoriteFilms,
-            films: this._films,
             friends: this._friends,
-            expectedFilms: this._expecredFilms,
             persons: this._persons,
-            favoritePersons: this._favoritePersons,
             reviews: this._reviews,
             comments: this._comments,
             likedFilms: this._likedFilms,
-            dislikedfilms: this._dislikedFilms,
+            dislikedFilms: this._dislikedFilms,
+            likedComments: this._likedComments,
+            dislikedComments: this._dislikedComments,
+            likedReviews: this._likedReviews,
+            dislikedReviews: this._dislikedReviews,
             avatarImage: this._avatarImage,
-            wasOnline: this._wasOnline,
         };
+    }
+    updateFriends(friends) {
+        try {
+            this._friends = [...this._friends, ...friends];
+        }
+        catch (error) {
+            throw new Error('Ошибка при обновлении количества друзей!');
+        }
     }
     updateGender(gender) {
         try {
@@ -190,6 +198,14 @@ class UserEntity {
         }
         catch (err) {
             throw new Error('Слишком мало символов!');
+        }
+    }
+    updateGenres(genres) {
+        try {
+            this._favoriteGenres = genres;
+        }
+        catch (err) {
+            throw new Error('Ошибка при обновлении жанров!');
         }
     }
     updateAboutMe(about) {
@@ -278,6 +294,86 @@ class UserEntity {
         }
         else {
             throw new Error('Новый аватар не валиден');
+        }
+    }
+    updatePersons(person) {
+        if (person) {
+            if (!this._persons.includes(person)) {
+                this._persons = [...this._persons, person];
+            }
+            else {
+                this._persons = this._persons.filter((i) => i !== person);
+            }
+        }
+    }
+    updateFavoriteFilms(favoriteFilm) {
+        if (favoriteFilm) {
+            if (!this._favoriteFilms.includes(favoriteFilm)) {
+                this._favoriteFilms = [...this._favoriteFilms, favoriteFilm];
+            }
+            else {
+                this._favoriteFilms = this._favoriteFilms.filter((i) => i !== favoriteFilm);
+            }
+        }
+    }
+    updateLikedFilms(likedFilm) {
+        if (likedFilm) {
+            if (!this._likedFilms.includes(likedFilm)) {
+                this._likedFilms = [...this._likedFilms, likedFilm];
+            }
+            else {
+                this._likedFilms = this._likedFilms.filter((i) => i !== likedFilm);
+            }
+        }
+    }
+    updateDislikedFilms(dislikedFilm) {
+        if (dislikedFilm) {
+            if (!this._dislikedFilms.includes(dislikedFilm)) {
+                this._dislikedFilms = [...this._dislikedFilms, dislikedFilm];
+            }
+            else {
+                this._dislikedFilms = this._dislikedFilms.filter((i) => i !== dislikedFilm);
+            }
+        }
+    }
+    updateLikedComments(likedComment) {
+        if (likedComment) {
+            if (!this._likedComments.includes(likedComment)) {
+                this._likedComments = [...this._likedComments, likedComment];
+            }
+            else {
+                this._likedComments = this._likedComments.filter((i) => i !== likedComment);
+            }
+        }
+    }
+    updateDislikedComments(dislikedComment) {
+        if (dislikedComment) {
+            if (!this._dislikedComments.includes(dislikedComment)) {
+                this._dislikedComments = [...this._dislikedComments, dislikedComment];
+            }
+            else {
+                this._dislikedComments = this._dislikedComments.filter((i) => i !== dislikedComment);
+            }
+        }
+    }
+    updateLikedReviews(likedReview) {
+        if (likedReview) {
+            if (!this._likedReviews.includes(likedReview)) {
+                this._likedReviews = [...this._likedReviews, likedReview];
+            }
+            else {
+                this._likedReviews = this._likedReviews.filter((i) => i !== likedReview);
+            }
+        }
+    }
+    updateDislikedReviews(dislikedReview) {
+        if (dislikedReview) {
+            if (!this._dislikedReviews.includes(dislikedReview)) {
+                this._dislikedReviews = [...this._dislikedReviews, dislikedReview];
+            }
+            else {
+                this._dislikedReviews = this._dislikedReviews.filter((i) => i !== dislikedReview);
+            }
         }
     }
     _validateUserEmail(email) {

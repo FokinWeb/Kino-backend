@@ -1,9 +1,3 @@
-import { CardEntity } from './card.entity';
-import { CommentEntity } from './comment.entity';
-import { Genres } from './genges.entity';
-import { PersonEntity } from './person.entity';
-import { ReviewEntity } from './review.entity';
-
 const USER_CONFIG = {
   password: {
     minLength: 6,
@@ -35,21 +29,22 @@ export class UserEntity {
     private _birthday: string,
     private _country: string,
     private _city: string,
-    private _favoriteGenres: Genres[],
+    private _favoriteGenres: string[],
     // second
-    private readonly _films: string[],
-    private readonly _friends: string[],
-    private readonly _favoriteFilms: string[],
-    private readonly _expecredFilms: string[],
-    private readonly _persons: string[],
-    private readonly _favoritePersons: string[],
+    private _friends: string[],
+    private _favoriteFilms: string[],
+    private _persons: string[],
     private _reviews: string[],
     private _comments: string[],
+
     // third
     private _likedFilms: string[],
     private _dislikedFilms: string[],
+    private _likedComments: string[],
+    private _dislikedComments: string[],
+    private _likedReviews: string[],
+    private _dislikedReviews: string[],
     private _avatarImage?: string,
-    private _wasOnline?: Date,
   ) {}
 
   get id(): string {
@@ -112,12 +107,8 @@ export class UserEntity {
     return this._city;
   }
 
-  public get favoriteGenres(): Genres[] {
+  public get favoriteGenres(): string[] {
     return this._favoriteGenres;
-  }
-
-  public get films(): string[] {
-    return this._films;
   }
 
   public get friends(): string[] {
@@ -128,15 +119,8 @@ export class UserEntity {
     return this._favoriteFilms;
   }
 
-  public get expectedFilms(): string[] {
-    return this._expecredFilms;
-  }
   public get persons(): string[] {
     return this._persons;
-  }
-
-  public get favoritePersons(): string[] {
-    return this._favoritePersons;
   }
 
   public get reviews(): string[] {
@@ -159,10 +143,18 @@ export class UserEntity {
     return this?._avatarImage;
   }
 
-  public get wasOnline(): Date {
-    return this?._wasOnline;
+  public get likedComments(): string[] {
+    return this._likedComments;
   }
-
+  public get dislikedComments(): string[] {
+    return this._dislikedComments;
+  }
+  public get likedReviews(): string[] {
+    return this._likedReviews;
+  }
+  public get dislikedReviews(): string[] {
+    return this._dislikedReviews;
+  }
   public getUserData() {
     return {
       id: this._id,
@@ -182,18 +174,26 @@ export class UserEntity {
       city: this._city,
       favoriteGenres: this._favoriteGenres,
       favoriteFilms: this._favoriteFilms,
-      films: this._films,
       friends: this._friends,
-      expectedFilms: this._expecredFilms,
       persons: this._persons,
-      favoritePersons: this._favoritePersons,
       reviews: this._reviews,
       comments: this._comments,
       likedFilms: this._likedFilms,
-      dislikedfilms: this._dislikedFilms,
+      dislikedFilms: this._dislikedFilms,
+      likedComments: this._likedComments,
+      dislikedComments: this._dislikedComments,
+      likedReviews: this._likedReviews,
+      dislikedReviews: this._dislikedReviews,
       avatarImage: this._avatarImage,
-      wasOnline: this._wasOnline,
     };
+  }
+
+  public updateFriends(friends: string[]): void | never {
+    try {
+      this._friends = [...this._friends, ...friends];
+    } catch (error) {
+      throw new Error('Ошибка при обновлении количества друзей!');
+    }
   }
 
   public updateGender(gender: string): void | never {
@@ -225,6 +225,14 @@ export class UserEntity {
       this._country = country;
     } catch (err) {
       throw new Error('Слишком мало символов!');
+    }
+  }
+
+  public updateGenres(genres: string[]): void | never {
+    try {
+      this._favoriteGenres = genres;
+    } catch (err) {
+      throw new Error('Ошибка при обновлении жанров!');
     }
   }
 
@@ -316,11 +324,89 @@ export class UserEntity {
     }
   }
 
+  public updatePersons(person: string): void | never {
+    if (person) {
+      if (!this._persons.includes(person)) {
+        this._persons = [...this._persons, person];
+      } else {
+        this._persons = this._persons.filter((i) => i !== person);
+      }
+    }
+  }
+
+  public updateFavoriteFilms(favoriteFilm: string): void | never {
+    if (favoriteFilm) {
+      if (!this._favoriteFilms.includes(favoriteFilm)) {
+        this._favoriteFilms = [...this._favoriteFilms, favoriteFilm];
+      } else {
+        this._favoriteFilms = this._favoriteFilms.filter((i) => i !== favoriteFilm);
+      }
+    }
+  }
+
+  public updateLikedFilms(likedFilm: string): void | never {
+    if (likedFilm) {
+      if (!this._likedFilms.includes(likedFilm)) {
+        this._likedFilms = [...this._likedFilms, likedFilm];
+      } else {
+        this._likedFilms = this._likedFilms.filter((i) => i !== likedFilm);
+      }
+    }
+  }
+
+  public updateDislikedFilms(dislikedFilm: string): void | never {
+    if (dislikedFilm) {
+      if (!this._dislikedFilms.includes(dislikedFilm)) {
+        this._dislikedFilms = [...this._dislikedFilms, dislikedFilm];
+      } else {
+        this._dislikedFilms = this._dislikedFilms.filter((i) => i !== dislikedFilm);
+      }
+    }
+  }
+
+  public updateLikedComments(likedComment: string): void | never {
+    if (likedComment) {
+      if (!this._likedComments.includes(likedComment)) {
+        this._likedComments = [...this._likedComments, likedComment];
+      } else {
+        this._likedComments = this._likedComments.filter((i) => i !== likedComment);
+      }
+    }
+  }
+
+  public updateDislikedComments(dislikedComment: string): void | never {
+    if (dislikedComment) {
+      if (!this._dislikedComments.includes(dislikedComment)) {
+        this._dislikedComments = [...this._dislikedComments, dislikedComment];
+      } else {
+        this._dislikedComments = this._dislikedComments.filter((i) => i !== dislikedComment);
+      }
+    }
+  }
+
+  public updateLikedReviews(likedReview: string): void | never {
+    if (likedReview) {
+      if (!this._likedReviews.includes(likedReview)) {
+        this._likedReviews = [...this._likedReviews, likedReview];
+      } else {
+        this._likedReviews = this._likedReviews.filter((i) => i !== likedReview);
+      }
+    }
+  }
+
+  public updateDislikedReviews(dislikedReview: string): void | never {
+    if (dislikedReview) {
+      if (!this._dislikedReviews.includes(dislikedReview)) {
+        this._dislikedReviews = [...this._dislikedReviews, dislikedReview];
+      } else {
+        this._dislikedReviews = this._dislikedReviews.filter((i) => i !== dislikedReview);
+      }
+    }
+  }
+
   private _validateUserEmail(email: string): boolean {
     const isEmailLengthValid = email.length >= USER_CONFIG.email.minLength;
-    const isEmailTruthy = email.match(
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-    );
+    const isEmailTruthy = email.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i);
 
     return isEmailTruthy && isEmailLengthValid;
   }

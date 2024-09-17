@@ -15,6 +15,15 @@ export class UpdateUserCommand {
     private _birthday: string,
     private _country: string,
     private _city: string,
+    private _favoriteGenres: string[],
+    private _person: string,
+    private _favoriteFilm: string,
+    private _likedFilm: string,
+    private _dislikedFilm: string,
+    private _likedComment: string,
+    private _dislikedComment: string,
+    private _likedReview: string,
+    private _dislikedReview: string,
   ) {}
 
   public get userId(): string {
@@ -23,6 +32,10 @@ export class UpdateUserCommand {
 
   public get email(): string {
     return this._email;
+  }
+
+  public get favoriteGenres(): string[] {
+    return this._favoriteGenres;
   }
 
   public get avatarImage(): string {
@@ -75,5 +88,36 @@ export class UpdateUserCommand {
 
   public get birthday(): string {
     return this._birthday;
+  }
+  public get person(): string {
+    return this._person;
+  }
+
+  public get favoriteFilm(): string {
+    return this._favoriteFilm;
+  }
+
+  public get likedFilm(): string {
+    return this._likedFilm;
+  }
+
+  public get dislikedFilm(): string {
+    return this._dislikedFilm;
+  }
+
+  public get dislikedComment(): string {
+    return this._dislikedComment;
+  }
+
+  public get likedComment(): string {
+    return this._likedComment;
+  }
+
+  public get dislikedReview(): string {
+    return this._dislikedReview;
+  }
+
+  public get likedReview(): string {
+    return this._likedReview;
   }
 }

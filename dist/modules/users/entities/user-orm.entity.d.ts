@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { Genres } from './genges.entity';
 import { ObjectId } from 'mongodb';
 export type UserDocument = User & Document;
 export declare class User {
@@ -14,22 +13,22 @@ export declare class User {
     facebook: string;
     aboutMe: string;
     avatarImage?: string;
-    wasOnline?: Date;
     gender: string;
     birthday: string;
     country: string;
     city: string;
-    favoriteGenres: Genres[];
-    films: string[];
+    favoriteGenres: string[];
     friends: ObjectId[];
-    favoriteFilms: string[];
-    expectedFilms: string[];
-    persons: string[];
-    favoritePersons: string[];
-    reviews: string[];
-    comments: string[];
-    likedFilms: string[];
-    dislikedFilms: string[];
+    favoriteFilms: ObjectId[];
+    persons: ObjectId[];
+    reviews: ObjectId[];
+    comments: ObjectId[];
+    likedFilms: ObjectId[];
+    dislikedFilms: ObjectId[];
+    dislikedComments: ObjectId[];
+    likedComments: ObjectId[];
+    dislikedReviews: ObjectId[];
+    likedReviews: ObjectId[];
 }
 export declare const UserSchema: mongoose.Schema<User, mongoose.Model<User, any, any, any, mongoose.Document<unknown, any, User> & User & {
     _id: mongoose.Types.ObjectId;
